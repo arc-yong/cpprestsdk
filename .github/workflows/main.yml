@@ -19,7 +19,7 @@ parameters:
   image: 'windows-latest'
 
 jobs:
-- job: ${{ parameters.name }}
+-job: ${{ parameters.name }}
   pool:
     vmImage: ${{ parameters.image }}
   variables:
