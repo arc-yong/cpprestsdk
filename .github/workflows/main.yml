@@ -19,8 +19,8 @@ parameters:
   image: 'windows-latest'
 
 jobs:
--job: ${{ parameters.name }}
-  pool:
+  -job: ${{ parameters.name }}
+   pool:
     vmImage: ${{ parameters.image }}
   variables:
     vcpkgLocation: '$(Build.SourcesDirectory)/vcpkg'
