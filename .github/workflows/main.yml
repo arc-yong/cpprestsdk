@@ -19,18 +19,7 @@ jobs:
         fetch-depth: 1
     - name: Update Submodules
       run: git submodule update --init
-    - name: Build (iOS)
-      timeout-minutes: 30
-      run: |
-        set -x
-        mkdir -p bins/ios/cpprestsdk
-        pushd Build_iOS
-        BOOST_VERSION="1.71.0" OPENSSL_VERSION="1.1.1d" ./configure.sh -build_type ${{ matrix.flavor }}
-        ls -alFR .
-        if [ -f build.${{ matrix.flavor }}.ios/lib/libcpprest.a ]; then mv build.${{ matrix.flavor }}.ios/lib ${GITHUB_WORKSPACE}/bins/ios/cpprestsdk/; mv build.${{ matrix.flavor }}.ios/include ${GITHUB_WORKSPACE}/bins/ios/cpprestsdk/; fi
-        if [ -d openssl           ]; then mv openssl           ${GITHUB_WORKSPACE}/bins/ios/; fi
-        if [ -d boost.xcframework ]; then mv boost.xcframework ${GITHUB_WORKSPACE}/bins/ios/; fi
-      if: matrix.os == 'macos-latest'
+
     - name: Build (Android)
       timeout-minutes: 25
       run: |
@@ -51,6 +40,18 @@ jobs:
         if [ -d openssl                     ]; then mv openssl                     ${GITHUB_WORKSPACE}/bins/android/; fi
         if [ -d Boost-for-Android/build/out ]; then mv Boost-for-Android/build/out ${GITHUB_WORKSPACE}/bins/android/boost; fi
       if: matrix.os == 'ubuntu-latest'
+    - name: Build (iOS)
+      timeout-minutes: 30
+      run: |
+        set -x
+        mkdir -p bins/ios/cpprestsdk
+        pushd Build_iOS
+        BOOST_VERSION="1.71.0" OPENSSL_VERSION="1.1.1d" ./configure.sh -build_type ${{ matrix.flavor }}
+        ls -alFR .
+        if [ -f build.${{ matrix.flavor }}.ios/lib/libcpprest.a ]; then mv build.${{ matrix.flavor }}.ios/lib ${GITHUB_WORKSPACE}/bins/ios/cpprestsdk/; mv build.${{ matrix.flavor }}.ios/include ${GITHUB_WORKSPACE}/bins/ios/cpprestsdk/; fi
+        if [ -d openssl           ]; then mv openssl           ${GITHUB_WORKSPACE}/bins/ios/; fi
+        if [ -d boost.xcframework ]; then mv boost.xcframework ${GITHUB_WORKSPACE}/bins/ios/; fi
+      if: matrix.os == 'macos-latest'
     - name: Prepare Binaries
       timeout-minutes: 5
       run: |
